@@ -3,9 +3,10 @@ import requests
 
 
 for page in range(1,11):
-  url = 'https://quotes.toscrape.com/{page}'
-  r = requests.get('https://quotes.toscrape.com/')
+  url = 'https://quotes.toscrape.com/page/' + str(page)
+  r = requests.get(url)
   html = r.text
+  print(html)
   with open('quotes.txt', 'a', encoding='utf-8') as f:
     for line in html.split('\n'):
       if '<span class="text" itemprop="text">' in line:
