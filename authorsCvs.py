@@ -2,8 +2,11 @@ import csv
 import requests
 
 url = 'https://quotes.toscrape.com/'
-tag = '<span>by <small class="author" itemprop="author">'
-endTag ='</small>'
+authorTag = '<span>by <small class="author" itemprop="author">'
+authorEndTag ='</small>'
+
+quoteTag = '<span class="text" itemprop="text">“'
+quoteEndTag = '”</span>'
 
 response = requests.get(url)
 html = response.text
@@ -13,10 +16,14 @@ with open('authors.csv', 'w', encoding='UTF8') as file:
   # create the csv writer
   writer = csv.writer(file)
   for line in html.split('\n'):
-    if tag in line:
-      line = line.replace(tag, '').replace(endTag, '')
-      line = line.strip()
-      print([line])
+    # quote
+    if quoteTag in line:
+      quote = line.replace(quoteTag, '').replace(quoteEndTag, '').strip()  
+    # author
+    if authorTag in line:
+      author = line.replace(authorTag, '').replace(authorEndTag, '').strip()
+      # print vars
+      print([quote, author])    
       # write a row to the csv file
-      writer.writerow([line])
+      writer.writerow([author, quote])
   file.close()      
